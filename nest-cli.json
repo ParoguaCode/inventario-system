@@ -9,15 +9,6 @@
   "monorepo": true,
   "root": "apps/producto",
   "projects": {
-    "inventario": {
-      "type": "application",
-      "root": "apps/inventario",
-      "entryFile": "main",
-      "sourceRoot": "apps/inventario/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/inventario/tsconfig.app.json"
-      }
-    },
     "producto": {
       "type": "application",
       "root": "apps/producto",
@@ -27,6 +18,15 @@
         "tsConfigPath": "apps/producto/tsconfig.app.json"
       }
     },
+    "inventario": {
+      "type": "application",
+      "root": "apps/inventario",
+      "entryFile": "main",
+      "sourceRoot": "apps/inventario/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/inventario/tsconfig.app.json"
+      }
+    },
     "reposicion": {
       "type": "application",
       "root": "apps/reposicion",
@@ -34,6 +34,15 @@
       "sourceRoot": "apps/reposicion/src",
       "compilerOptions": {
         "tsConfigPath": "apps/reposicion/tsconfig.app.json"
+      }
+    },
+    "contracts": {
+      "type": "library",
+      "root": "libs/contracts",
+      "entryFile": "index",
+      "sourceRoot": "libs/contracts/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/contracts/tsconfig.lib.json"
       }
     }
   }

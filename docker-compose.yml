@@ -1,0 +1,68 @@
+# ============================================================
+#  Infraestructura local — Inventario de Almacén (Grupo 10)
+# ------------------------------------------------------------
+#  Servicios:
+#    - NATS      → broker de mensajería entre microservicios
+#    - pg-inventario  → PostgreSQL para producto + inventario
+#    - pg-reposicion  → PostgreSQL para reposicion
+#
+#  Las apps corren en tu host con `npm run start:*`
+# ============================================================
+
+services:
+  nats:
+    image: nats:2.10-alpine
+    container_name: nats-broker
+    restart: unless-stopped
+    ports:
+      - "4222:4222"   # Puerto de clientes (lo usan los microservicios)
+      - "8222:8222"   # Endpoint HTTP de monitoreo
+    command:
+      - "-js"
+      - "-m"
+      - "8222"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O-", "http://localhost:8222/healthz"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  pg-inventario:
+    image: postgres:16-alpine
+    container_name: pg-inventario
+    restart: unless-stopped
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB: db_inventario
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - pg_inventario_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db_inventario"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  pg-reposicion:
+    image: postgres:16-alpine
+    container_name: pg-reposicion
+    restart: unless-stopped
+    ports:
+      - "15433:5432"
+    environment:
+      POSTGRES_DB: db_reposicion
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+    volumes:
+      - pg_reposicion_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d db_reposicion"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  pg_inventario_data:
+  pg_reposicion_data:

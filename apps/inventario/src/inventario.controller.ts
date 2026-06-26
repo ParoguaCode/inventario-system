@@ -3,7 +3,7 @@ import { InventarioService } from './inventario.service';
 
 @Controller()
 export class InventarioController {
-  constructor(private readonly inventarioService: InventarioService) {}
+  constructor(private readonly inventarioService: InventarioService) { }
 
   @Get()
   getHello(): string {
