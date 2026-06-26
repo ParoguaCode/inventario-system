@@ -1,22 +1,21 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/inventario-system/src",
+  "sourceRoot": "apps/producto/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/inventario-system/tsconfig.app.json"
+    "tsConfigPath": "apps/producto/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/inventario-system",
+  "root": "apps/producto",
   "projects": {
-    "inventario-system": {
+    "inventario": {
       "type": "application",
-      "root": "apps/inventario-system",
+      "root": "apps/inventario",
       "entryFile": "main",
-      "sourceRoot": "apps/inventario-system/src",
+      "sourceRoot": "apps/inventario/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/inventario-system/tsconfig.app.json"
+        "tsConfigPath": "apps/inventario/tsconfig.app.json"
       }
     },
     "producto": {
@@ -26,6 +25,15 @@
       "sourceRoot": "apps/producto/src",
       "compilerOptions": {
         "tsConfigPath": "apps/producto/tsconfig.app.json"
+      }
+    },
+    "reposicion": {
+      "type": "application",
+      "root": "apps/reposicion",
+      "entryFile": "main",
+      "sourceRoot": "apps/reposicion/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/reposicion/tsconfig.app.json"
       }
     }
   }
