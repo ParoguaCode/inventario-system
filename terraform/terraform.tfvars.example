@@ -1,0 +1,15 @@
+# Configura las credenciales de AWS si no estás usando `aws configure`
+# access_key = "TU_ACCESS_KEY"
+# secret_key = "TU_SECRET_KEY"
+
+# Opcionalmente, puedes cambiar la región
+# aws_region = "us-east-1"
+
+# Contraseñas obligatorias para las bases de datos (deben ser fuertes)
+db_inventario_password = "CambiaEstoPorUnaContraseñaFuerte123!"
+db_reposicion_password = "CambiaEstoPorOtraContraseñaFuerte123!"
+
+# Opcional: configurar cantidad de instancias
+# producto_desired_count = 1
+# inventario_desired_count = 1
+# reposicion_desired_count = 1

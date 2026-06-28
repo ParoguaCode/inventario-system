@@ -1,0 +1,29 @@
+# Dependencias y builds locales (se reinstalan dentro del contenedor)
+node_modules
+dist
+
+# Cobertura de tests
+coverage
+
+# Archivos de entorno locales
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# Editor y OS
+.vscode
+.idea
+*.DS_Store
+Thumbs.db
+
+# Docker (no incluir los propios Dockerfiles en el contexto es innecesario,
+# pero sí excluimos archivos que no aportan nada al build)
+.dockerignore

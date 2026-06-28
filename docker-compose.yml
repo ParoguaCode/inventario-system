@@ -1,15 +1,21 @@
 # ============================================================
-#  Infraestructura local — Inventario de Almacén (Grupo 10)
+#  Stack completo — Inventario de Almacén (Grupo 10)
 # ------------------------------------------------------------
-#  Servicios:
-#    - NATS      → broker de mensajería entre microservicios
-#    - pg-inventario  → PostgreSQL para producto + inventario
-#    - pg-reposicion  → PostgreSQL para reposicion
+#  Infraestructura:
+#    - nats          → broker de mensajería entre microservicios
+#    - pg-inventario → PostgreSQL para producto + inventario
+#    - pg-reposicion → PostgreSQL para reposicion
 #
-#  Las apps corren en tu host con `npm run start:*`
+#  Microservicios:
+#    - producto      → HTTP :3000 (CRUD + cliente NATS)
+#    - inventario    → Worker NATS (procesa movimientos de stock)
+#    - reposicion    → Worker NATS (genera órdenes de reposición)
 # ============================================================
 
 services:
+
+  # ── Infraestructura ──────────────────────────────────────────────────────────
+
   nats:
     image: nats:2.10-alpine
     container_name: nats-broker
@@ -62,6 +68,68 @@ services:
       interval: 5s
       timeout: 3s
       retries: 5
+
+  # ── Microservicios ───────────────────────────────────────────────────────────
+
+  producto:
+    build:
+      context: .
+      dockerfile: apps/producto/Dockerfile
+    container_name: ms-producto
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      NATS_URL: nats://nats:4222
+      DB_INVENTARIO_HOST: pg-inventario
+      DB_INVENTARIO_PORT: 5432
+      DB_INVENTARIO_NAME: db_inventario
+      DB_INVENTARIO_USER: admin
+      DB_INVENTARIO_PASSWORD: admin123
+    depends_on:
+      nats:
+        condition: service_healthy
+      pg-inventario:
+        condition: service_healthy
+
+  inventario:
+    build:
+      context: .
+      dockerfile: apps/inventario/Dockerfile
+    container_name: ms-inventario
+    restart: unless-stopped
+    environment:
+      NATS_URL: nats://nats:4222
+      DB_INVENTARIO_HOST: pg-inventario
+      DB_INVENTARIO_PORT: 5432
+      DB_INVENTARIO_NAME: db_inventario
+      DB_INVENTARIO_USER: admin
+      DB_INVENTARIO_PASSWORD: admin123
+    depends_on:
+      nats:
+        condition: service_healthy
+      pg-inventario:
+        condition: service_healthy
+
+  reposicion:
+    build:
+      context: .
+      dockerfile: apps/reposicion/Dockerfile
+    container_name: ms-reposicion
+    restart: unless-stopped
+    environment:
+      NATS_URL: nats://nats:4222
+      DB_REPOSICION_HOST: pg-reposicion
+      DB_REPOSICION_PORT: 5432
+      DB_REPOSICION_NAME: db_reposicion
+      DB_REPOSICION_USER: admin
+      DB_REPOSICION_PASSWORD: admin123
+    depends_on:
+      nats:
+        condition: service_healthy
+      pg-reposicion:
+        condition: service_healthy
 
 volumes:
   pg_inventario_data:

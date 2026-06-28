@@ -19,6 +19,7 @@ import {
       username: DB_INVENTARIO.USERNAME,
       password: DB_INVENTARIO.PASSWORD,
       database: DB_INVENTARIO.DATABASE,
+      ssl: DB_INVENTARIO.HOST.includes('rds.amazonaws.com') ? { rejectUnauthorized: false } : false,
       autoLoadEntities: true,
       synchronize: true, // NOTA: Solo para desarrollo
     }),
